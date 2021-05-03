@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-gradient-to-br from-pink-400 to-blue-500 h-full flex flex-col justify-between"
+    class="bg-gradient-to-br from-pink-500 to-blue-600 h-full flex flex-col justify-between"
   >
     <div class="flex-grow flex justify-center items-center flex-col">
       <fade>
