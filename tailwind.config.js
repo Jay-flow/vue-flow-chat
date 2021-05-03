@@ -26,6 +26,7 @@ module.exports = {
       indigo: colors.indigo,
       purple: colors.violet,
       pink: colors.pink,
+      teal: colors.teal,
     },
     spacing: {
       px: "1px",
@@ -282,6 +283,7 @@ module.exports = {
         '"Courier New"',
         "monospace",
       ],
+      dancing: ["Dancing Script"],
     },
     fontSize: {
       "xs": ["0.75rem", { lineHeight: "1rem" }],

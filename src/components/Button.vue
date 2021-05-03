@@ -1,8 +1,9 @@
 <template>
   <button
-    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    class="bg-white hover:bg-gray-200 font-bold py-2 px-4 rounded"
+    @click="$emit('onClick')"
   >
-    Button
+    <slot></slot>
   </button>
 </template>
 
@@ -11,5 +12,6 @@
 
   export default defineComponent({
     name: "Button",
+    emits: ["onClick"],
   })
 </script>
