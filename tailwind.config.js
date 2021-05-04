@@ -556,6 +556,7 @@ module.exports = {
     }),
     minHeight: {
       0: "0px",
+      xl: "1.25rem",
       full: "100%",
       screen: "100vh",
     },
@@ -963,7 +964,7 @@ module.exports = {
     objectPosition: ["responsive"],
     opacity: ["responsive", "group-hover", "focus-within", "hover", "focus"],
     order: ["responsive"],
-    outline: ["responsive", "focus-within", "focus"],
+    outline: ["responsive", "focus-within", "focus", "focus-visible"],
     overflow: ["responsive"],
     overscrollBehavior: ["responsive"],
     padding: ["responsive"],

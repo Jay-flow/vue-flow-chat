@@ -10,7 +10,6 @@
     height="15px"
     viewBox="0 0 535.5 535.5"
     style="enable-background: new 0 0 535.5 535.5"
-    class="fill-current text-white"
     xml:space="preserve"
   >
     <polygon
