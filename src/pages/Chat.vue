@@ -18,6 +18,7 @@
         }"
         ref="inputBox"
         @input="autoGrow"
+        @keypress.enter="send"
       />
       <div class="h-full flex flex-col-reverse cursor-pointer" @click="send">
         <div class="mb-1">
@@ -56,6 +57,7 @@
         if (this.prevInputLineNumbers != lineNumbers) {
           this.inputBoxHeight = lineNumbers == 1 ? 30 : lineNumbers * 26
           this.prevInputLineNumbers = lineNumbers
+          this.$refs.inputBox.scrollTop = scrollHeight
         }
       },
       send() {
