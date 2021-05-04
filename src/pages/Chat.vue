@@ -7,7 +7,9 @@
       />
       <span class="text-white text-xl">Chat</span>
     </div>
-    <div class="flex-grow flex flex-col-reverse bg-teal-400 p-3 relative">
+    <div
+      class="h-full flex flex-col-reverse relative overflow-auto bg-teal-400 p-3"
+    >
       <fade
         v-show="isNotifyKeyInfo"
         class="absolute top-0 left-0 text-center w-full"
@@ -17,18 +19,11 @@
           있습니다.
         </span>
       </fade>
-      <div class="flex justify-end items-end">
-        <span class="mr-2 text-gray-900">11:30</span>
-        <div class="bg-white px-3 py-1 rounded-full text-gray-900">
-          Hello world!
-        </div>
-      </div>
-      <div class="flex justify-start items-end">
-        <div class="bg-white px-3 py-1 rounded-full text-gray-900">
-          How are you?
-        </div>
-        <span class="ml-2 text-gray-900">11:30</span>
-      </div>
+      <message
+        v-for="(message, idx) in messages"
+        :message="message"
+        :key="idx"
+      ></message>
     </div>
     <div class="flex border-t p-3">
       <div
@@ -36,7 +31,7 @@
         contenteditable="true"
         autofocus
         class="flex-grow h-auto max-h-40 overflow-auto focus-visible:outline-none text-xl"
-        @keydown.shift.enter.prevent="send"
+        @keypress.shift.enter.prevent="send"
       ></div>
       <div
         class="flex items-end pb-0.5 w-10 h-full px-2 cursor-pointer"
@@ -53,6 +48,7 @@
   import LeftArrowIcon from "../components/svg/LeftArrowIcon.vue"
   import SendIcon from "../components/svg/SendIcon.vue"
   import Fade from "../components/animations/Fade.vue"
+  import Message from "../components/Message.vue"
 
   export default defineComponent({
     name: "Chat",
@@ -60,10 +56,12 @@
       LeftArrowIcon,
       SendIcon,
       Fade,
+      Message,
     },
     data() {
       return {
         isNotifyKeyInfo: true,
+        messages: [],
       }
     },
     mounted() {
@@ -81,10 +79,12 @@
       },
       send() {
         const sendText = this.$refs.inputBox.innerText
-        this.cleanUpInput()
-      },
-      pressKeyHandler(event) {
-        console.log(event)
+        const now = new Date(Date.now())
+        console.log(now)
+        if (sendText.length != "") {
+          this.messages.unshift({ text: sendText, time: "11:30 AM" })
+          this.cleanUpInput()
+        }
       },
     },
   })
