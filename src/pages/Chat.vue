@@ -80,16 +80,22 @@
       },
       getTime() {
         const date = getNowDate()
+        const minutes = String(date.minutes).padStart(2, "0")
         if (date.hours >= 12) {
-          return `${date.hours - 11}:${date.minutes} PM`
+          return `${date.hours - 11}:${minutes} PM`
         }
-        return `${date.hours}:${date.minutes} AM`
+        return `${date.hours}:${minutes} AM`
       },
       send() {
         const sendText = this.$refs.inputBox.innerText
 
         if (sendText.length != "") {
-          this.messages.unshift({ text: sendText, time: this.getTime() })
+          this.messages.unshift({
+            text: sendText,
+            time: this.getTime(),
+            author: "태연",
+            isItMe: Math.random() < 0.5,
+          })
           this.cleanUpInput()
         }
       },

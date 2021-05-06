@@ -552,6 +552,11 @@ module.exports = {
       "min": "min-content",
       "max": "max-content",
       "prose": "65ch",
+      "1/4": "25%",
+      "1/2": "50%",
+      "3/4": "75%",
+      "3/5": "60%",
+      "4/6": "66.666667%",
       ...breakpoints(theme("screens")),
     }),
     minHeight: {
