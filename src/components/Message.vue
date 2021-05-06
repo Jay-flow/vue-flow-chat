@@ -5,11 +5,11 @@
       src="https://i.pinimg.com/originals/d5/58/46/d55846793dea72b5918903f3fb0d85ad.png"
       class="mr-2 mt-1"
     />
-    <div class="flex flex-col max-w-3/5">
+    <div class="flex flex-col flex-wrap max-w-3/4">
       <span v-if="!message.isItMe" class="text-sm ml-1 mb-0.5">{{
         message.author
       }}</span>
-      <span class="bg-white px-3 py-1 rounded-md text-gray-900">
+      <span class="bg-white px-3 py-1 rounded-md text-gray-900 break-all">
         {{ message.text }}
       </span>
     </div>

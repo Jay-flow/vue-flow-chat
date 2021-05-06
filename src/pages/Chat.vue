@@ -8,7 +8,8 @@
       <span class="text-white text-xl">Chat</span>
     </div>
     <div
-      class="h-full flex flex-col-reverse relative overflow-auto bg-teal-400 p-3"
+      class="h-full flex flex-col-reverse relative overflow-y-auto bg-teal-400 p-3"
+      ref="messageContainer"
     >
       <fade
         v-show="isNotifyKeyInfo"
@@ -20,18 +21,19 @@
         </span>
       </fade>
       <message
+        class="w-full"
         v-for="(message, idx) in messages"
         :message="message"
         :key="idx"
       ></message>
     </div>
-    <div class="flex border-t p-3">
+    <div class="flex p-3">
       <div
         ref="inputBox"
         contenteditable="true"
         autofocus
         class="flex-grow h-auto max-h-40 overflow-auto focus-visible:outline-none text-xl"
-        @keypress.shift.enter.prevent="send"
+        @keypress.enter.exact.prevent="send"
       ></div>
       <div
         class="flex items-end pb-0.5 w-10 h-full px-2 cursor-pointer"
@@ -77,6 +79,8 @@
       cleanUpInput() {
         this.$refs.inputBox.innerText = ""
         this.$refs.inputBox.focus()
+
+        this.$refs.messageContainer.scrollTop = this.$refs.messageContainer.scrollHeight
       },
       getTime() {
         const date = getNowDate()
