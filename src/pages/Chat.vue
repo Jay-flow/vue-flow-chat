@@ -25,21 +25,81 @@
         v-for="(message, idx) in messages"
         :message="message"
         :key="idx"
-      ></message>
+      >
+        <span
+          v-if="message.type === 'text'"
+          class="bg-white px-3 py-1 rounded-md text-gray-900 break-all whitespace-pre-line"
+        >
+          {{ message.content }}
+        </span>
+        <img
+          v-else-if="message.type === 'image'"
+          :src="message.content"
+          class="rounded-md max-h-60"
+        />
+      </message>
+      <!-- <img :src="image" /> -->
     </div>
-    <div class="flex items-center px-5 py-3">
-      <div class="cursor-pointer" @click="send">
+    <div class="flex items-end px-5 py-3">
+      <div class="cursor-pointer" @click="showFunctions">
         <plus-icon class="h-6 w-6 fill-current text-gray-900" />
       </div>
       <div
         ref="inputBox"
         contenteditable="true"
         autofocus
-        class="flex-grow h-auto max-h-40 overflow-auto focus-visible:outline-none text-xl mx-3"
-        @keypress.enter.exact.prevent="send"
+        class="flex-grow max-h-40 overflow-auto focus-visible:outline-none text-base mx-3"
+        @keypress.enter.exact.prevent="send($refs.inputBox.innerText, 'text')"
       ></div>
-      <div class="cursor-pointer" @click="send">
+      <div
+        class="cursor-pointer"
+        @click="send($refs.inputBox.innerText, 'text')"
+      >
         <send-icon class="h-6 w-6 fill-current text-gray-900" />
+      </div>
+    </div>
+    <div
+      v-show="isShowFunctions"
+      class="bg-white h-24 w-full flex items-center p-4 border-t border-gray-100"
+    >
+      <input
+        type="file"
+        accept="image/*"
+        @change="uploadImage"
+        class="hidden"
+        ref="inputImage"
+        multiple
+      />
+
+      <input
+        type="file"
+        accept="video/*"
+        @change="uploadVideo"
+        class="hidden"
+        ref="inputVideo"
+      />
+
+      <div
+        class="flex flex-col justify-center items-center cursor-pointer mr-5"
+        @click="$refs.inputImage.click()"
+      >
+        <div
+          class="bg-pink-500 rounded-full w-14 h-14 flex justify-center items-center mb-1.5"
+        >
+          <gallery-icon class="h-6 fill-current text-white" />
+        </div>
+        <span class="text-xs">Photo</span>
+      </div>
+      <div
+        class="flex flex-col justify-center items-center cursor-pointer"
+        @click="$refs.inputVideo.click()"
+      >
+        <div
+          class="bg-purple-500 rounded-full w-14 h-14 flex justify-center items-center mb-1.5"
+        >
+          <video-icon class="h-6 fill-current text-white" />
+        </div>
+        <span class="text-xs">Video</span>
       </div>
     </div>
   </div>
@@ -50,6 +110,8 @@
   import LeftArrowIcon from "../components/svg/LeftArrowIcon.vue"
   import SendIcon from "../components/svg/SendIcon.vue"
   import PlusIcon from "../components/svg/PlusIcon.vue"
+  import GalleryIcon from "../components/svg/GalleryIcon.vue"
+  import VideoIcon from "../components/svg/VideoIcon.vue"
   import Fade from "../components/animations/Fade.vue"
   import Message from "../components/Message.vue"
   import { getNowDate } from "../utils/formating"
@@ -62,11 +124,15 @@
       Fade,
       Message,
       PlusIcon,
+      GalleryIcon,
+      VideoIcon,
     },
     data() {
       return {
         isNotifyKeyInfo: true,
+        isShowFunctions: true,
         messages: [],
+        image: null,
       }
     },
     mounted() {
@@ -79,9 +145,11 @@
         this.$router.back()
       },
       cleanUpInput() {
+        if (this.isShowFunctions) {
+          this.isShowFunctions = false
+        }
         this.$refs.inputBox.innerText = ""
         this.$refs.inputBox.focus()
-
         this.$refs.messageContainer.scrollTop = this.$refs.messageContainer.scrollHeight
       },
       getTime() {
@@ -92,18 +160,44 @@
         }
         return `${date.hours}:${minutes} AM`
       },
-      send() {
-        const sendText = this.$refs.inputBox.innerText
-
-        if (sendText.length != "") {
+      send(message, type) {
+        if (message.length != "") {
           this.messages.unshift({
-            text: sendText,
+            content: message,
+            type: type,
             time: this.getTime(),
             author: "태연",
             isItMe: Math.random() < 0.5,
           })
-          this.cleanUpInput()
+          if (type === "text") {
+            this.cleanUpInput()
+          }
         }
+      },
+      showFunctions() {
+        this.isShowFunctions = !this.isShowFunctions
+      },
+      calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
+        var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight)
+        return { width: srcWidth * ratio, height: srcHeight * ratio }
+      },
+      resizeImage() {
+        this.calculateAspectRatioFit()
+      },
+      uploadImage(e) {
+        for (let file of e.target.files) {
+          const reader = new FileReader()
+          reader.readAsDataURL(file)
+          reader.onload = (e) => {
+            const preViewImage = e.target?.result
+            this.image = preViewImage
+            console.log(this.image)
+            this.send(preViewImage, "image")
+          }
+        }
+      },
+      uploadVideo() {
+        console.log("uploadVideo")
       },
     },
   })
