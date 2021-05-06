@@ -10,7 +10,6 @@
     style="enable-background: new 0 0 492 492"
     xml:space="preserve"
     class="fill-current text-white"
-    @click="$emit('onClick')"
   >
     <path
       d="M198.608,246.104L382.664,62.04c5.068-5.056,7.856-11.816,7.856-19.024c0-7.212-2.788-13.968-7.856-19.032l-16.128-16.12
@@ -25,6 +24,5 @@
 
   export default defineComponent({
     name: "LeftArrowIcon",
-    emits: ["onClick"],
   })
 </script>

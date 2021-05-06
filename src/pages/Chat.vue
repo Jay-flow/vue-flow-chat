@@ -3,7 +3,7 @@
     <div class="flex items-center px-3 bg-teal-400 h-12">
       <left-arrow-icon
         class="w-5 mr-3 cursor-pointer"
-        @onClick="backButtonClick"
+        @click="backButtonClick"
       />
       <span class="text-white text-xl">Chat</span>
     </div>
@@ -16,7 +16,7 @@
         class="absolute top-0 left-0 text-center w-full"
       >
         <span class="text-xs text-gray-900">
-          입력 중 Shift + Enter를 누르시면 메세지를 상대방에게 바로 전송할 수
+          입력 중 Shift + Enter를 누르시면 줄을 바꿔 메세지를 작성할 수
           있습니다.
         </span>
       </fade>
@@ -27,18 +27,18 @@
         :key="idx"
       ></message>
     </div>
-    <div class="flex p-3">
+    <div class="flex items-center px-5 py-3">
+      <div class="cursor-pointer" @click="send">
+        <plus-icon class="h-6 w-6 fill-current text-gray-900" />
+      </div>
       <div
         ref="inputBox"
         contenteditable="true"
         autofocus
-        class="flex-grow h-auto max-h-40 overflow-auto focus-visible:outline-none text-xl"
+        class="flex-grow h-auto max-h-40 overflow-auto focus-visible:outline-none text-xl mx-3"
         @keypress.enter.exact.prevent="send"
       ></div>
-      <div
-        class="flex items-end pb-0.5 w-10 h-full px-2 cursor-pointer"
-        @click="send"
-      >
+      <div class="cursor-pointer" @click="send">
         <send-icon class="h-6 w-6 fill-current text-gray-900" />
       </div>
     </div>
@@ -49,6 +49,7 @@
   import { defineComponent } from "vue"
   import LeftArrowIcon from "../components/svg/LeftArrowIcon.vue"
   import SendIcon from "../components/svg/SendIcon.vue"
+  import PlusIcon from "../components/svg/PlusIcon.vue"
   import Fade from "../components/animations/Fade.vue"
   import Message from "../components/Message.vue"
   import { getNowDate } from "../utils/formating"
@@ -60,6 +61,7 @@
       SendIcon,
       Fade,
       Message,
+      PlusIcon,
     },
     data() {
       return {
