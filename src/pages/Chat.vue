@@ -86,13 +86,13 @@
         const date = getNowDate()
         const minutes = String(date.minutes).padStart(2, "0")
         if (date.hours >= 12) {
-          return `${date.hours - 11}:${minutes} PM`
+          return `${date.hours - 12}:${minutes} PM`
         }
         return `${date.hours}:${minutes} AM`
       },
       send() {
         const sendText = this.$refs.inputBox.innerText
-        console.log(sendText)
+
         if (sendText.length != "") {
           this.messages.unshift({
             text: sendText,
