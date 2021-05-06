@@ -49,6 +49,7 @@
   import SendIcon from "../components/svg/SendIcon.vue"
   import Fade from "../components/animations/Fade.vue"
   import Message from "../components/Message.vue"
+  import { getNowDate } from "../utils/formating"
 
   export default defineComponent({
     name: "Chat",
@@ -77,12 +78,18 @@
         this.$refs.inputBox.innerText = ""
         this.$refs.inputBox.focus()
       },
+      getTime() {
+        const date = getNowDate()
+        if (date.hours >= 12) {
+          return `${date.hours - 11}:${date.minutes} PM`
+        }
+        return `${date.hours}:${date.minutes} AM`
+      },
       send() {
         const sendText = this.$refs.inputBox.innerText
-        const now = new Date(Date.now())
-        console.log(now)
+
         if (sendText.length != "") {
-          this.messages.unshift({ text: sendText, time: "11:30 AM" })
+          this.messages.unshift({ text: sendText, time: this.getTime() })
           this.cleanUpInput()
         }
       },
