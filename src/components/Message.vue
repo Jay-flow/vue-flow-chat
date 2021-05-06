@@ -9,7 +9,9 @@
       <span v-if="!message.isItMe" class="text-sm ml-1 mb-0.5">{{
         message.author
       }}</span>
-      <span class="bg-white px-3 py-1 rounded-md text-gray-900 break-all">
+      <span
+        class="bg-white px-3 py-1 rounded-md text-gray-900 break-all whitespace-pre-line"
+      >
         {{ message.text }}
       </span>
     </div>

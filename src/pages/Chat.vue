@@ -92,7 +92,7 @@
       },
       send() {
         const sendText = this.$refs.inputBox.innerText
-
+        console.log(sendText)
         if (sendText.length != "") {
           this.messages.unshift({
             text: sendText,
