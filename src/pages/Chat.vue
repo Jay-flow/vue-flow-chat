@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full">
-    <div class="flex items-center px-3 bg-teal-400 h-12">
+    <div class="flex items-center p-3 bg-teal-400 h-12">
       <left-arrow-icon
         class="w-5 mr-3 cursor-pointer"
         @click="backButtonClick"
@@ -13,7 +13,7 @@
     >
       <fade
         v-show="isNotifyKeyInfo"
-        class="absolute top-0 left-0 text-center w-full"
+        class="absolute top-0 left-0 text-center w-full px-20"
       >
         <span class="text-xs text-gray-900">
           입력 중 Shift + Enter를 누르시면 줄을 바꿔 메세지를 작성할 수
@@ -37,6 +37,12 @@
           :src="message.content"
           class="rounded-md max-h-60"
         />
+        <video
+          v-else-if="message.type === 'video'"
+          :src="message.content"
+          class="max-h-60"
+          controls
+        ></video>
       </message>
       <!-- <img :src="image" /> -->
     </div>
@@ -65,7 +71,7 @@
       <input
         type="file"
         accept="image/*"
-        @change="uploadImage"
+        @change="uploadFile"
         class="hidden"
         ref="inputImage"
         multiple
@@ -74,7 +80,7 @@
       <input
         type="file"
         accept="video/*"
-        @change="uploadVideo"
+        @change="uploadFile"
         class="hidden"
         ref="inputVideo"
       />
@@ -132,7 +138,6 @@
         isNotifyKeyInfo: true,
         isShowFunctions: true,
         messages: [],
-        image: null,
       }
     },
     mounted() {
@@ -145,9 +150,6 @@
         this.$router.back()
       },
       cleanUpInput() {
-        if (this.isShowFunctions) {
-          this.isShowFunctions = false
-        }
         this.$refs.inputBox.innerText = ""
         this.$refs.inputBox.focus()
         this.$refs.messageContainer.scrollTop = this.$refs.messageContainer.scrollHeight
@@ -184,20 +186,16 @@
       resizeImage() {
         this.calculateAspectRatioFit()
       },
-      uploadImage(e) {
+      uploadFile(e) {
         for (let file of e.target.files) {
           const reader = new FileReader()
           reader.readAsDataURL(file)
           reader.onload = (e) => {
-            const preViewImage = e.target?.result
-            this.image = preViewImage
-            console.log(this.image)
-            this.send(preViewImage, "image")
+            const preView = e.target?.result
+            const fileType = file.type.match(/image.*/) ? "image" : "video"
+            this.send(preView, fileType)
           }
         }
-      },
-      uploadVideo() {
-        console.log("uploadVideo")
       },
     },
   })
