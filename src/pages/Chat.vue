@@ -112,7 +112,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from "vue"
+  import { defineComponent, onMounted, Ref, ref } from "vue"
   import LeftArrowIcon from "../components/svg/LeftArrowIcon.vue"
   import SendIcon from "../components/svg/SendIcon.vue"
   import PlusIcon from "../components/svg/PlusIcon.vue"
@@ -121,6 +121,15 @@
   import Fade from "../components/animations/Fade.vue"
   import Message from "../components/Message.vue"
   import { getNowDate } from "../utils/formating"
+  import { useRouter } from "vue-router"
+
+  interface message {
+    content: string
+    type: string
+    time: string
+    author: string
+    isItMe: boolean
+  }
 
   export default defineComponent({
     name: "Chat",
@@ -133,70 +142,95 @@
       GalleryIcon,
       VideoIcon,
     },
-    data() {
-      return {
-        isNotifyKeyInfo: true,
-        isShowFunctions: true,
-        messages: [],
+    setup() {
+      const router = useRouter()
+      const isNotifyKeyInfo = ref(true)
+      const isShowFunctions = ref(true)
+      const inputBox = ref()
+      const messageContainer = ref()
+      const messages: Ref<message[]> = ref([])
+
+      onMounted(() => {
+        setTimeout(() => {
+          isNotifyKeyInfo.value = false
+        }, 5000)
+      })
+
+      const backButtonClick = () => {
+        router.back()
       }
-    },
-    mounted() {
-      setTimeout(() => {
-        this.isNotifyKeyInfo = false
-      }, 5000)
-    },
-    methods: {
-      backButtonClick() {
-        this.$router.back()
-      },
-      cleanUpInput() {
-        this.$refs.inputBox.innerText = ""
-        this.$refs.inputBox.focus()
-        this.$refs.messageContainer.scrollTop = this.$refs.messageContainer.scrollHeight
-      },
-      getTime() {
+
+      const cleanUpInput = () => {
+        inputBox.value.innerText = ""
+        inputBox.value.focus()
+        messageContainer.value.scrollTop = messageContainer.value.scrollHeight
+      }
+
+      const getTime = () => {
         const date = getNowDate()
         const minutes = String(date.minutes).padStart(2, "0")
         if (date.hours >= 12) {
           return `${date.hours - 12}:${minutes} PM`
         }
         return `${date.hours}:${minutes} AM`
-      },
-      send(message, type) {
-        if (message.length != "") {
-          this.messages.unshift({
+      }
+
+      const send = (message: string, type: string) => {
+        if (message != "") {
+          messages.value.unshift({
             content: message,
             type: type,
-            time: this.getTime(),
+            time: getTime(),
             author: "태연",
             isItMe: Math.random() < 0.5,
           })
           if (type === "text") {
-            this.cleanUpInput()
+            cleanUpInput()
           }
         }
-      },
-      showFunctions() {
-        this.isShowFunctions = !this.isShowFunctions
-      },
-      calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
-        var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight)
-        return { width: srcWidth * ratio, height: srcHeight * ratio }
-      },
-      resizeImage() {
-        this.calculateAspectRatioFit()
-      },
-      uploadFile(e) {
+      }
+
+      const showFunctions = () => {
+        isShowFunctions.value = !isShowFunctions.value
+      }
+
+      // const calculateAspectRatioFit = (
+      //   srcWidth,
+      //   srcHeight,
+      //   maxWidth,
+      //   maxHeight
+      // ) => {
+      //   var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight)
+      //   return { width: srcWidth * ratio, height: srcHeight * ratio }
+      // }
+
+      // const resizeImage = () => {
+      //   calculateAspectRatioFit()
+      // }
+
+      const uploadFile = (e) => {
         for (let file of e.target.files) {
           const reader = new FileReader()
           reader.readAsDataURL(file)
           reader.onload = (e) => {
             const preView = e.target?.result
             const fileType = file.type.match(/image.*/) ? "image" : "video"
-            this.send(preView, fileType)
+            send(preView, fileType)
           }
         }
-      },
+      }
+
+      return {
+        isNotifyKeyInfo,
+        isShowFunctions,
+        inputBox,
+        messageContainer,
+        messages,
+        backButtonClick,
+        showFunctions,
+        uploadFile,
+        send,
+      }
     },
   })
 </script>
