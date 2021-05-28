@@ -213,7 +213,7 @@
           const reader = new FileReader()
           reader.readAsDataURL(file)
           reader.onload = (e) => {
-            const preView = e.target?.result
+            const preView = e.target?.result as string
             const fileType = file.type.match(/image.*/) ? "image" : "video"
             send(preView, fileType)
           }
