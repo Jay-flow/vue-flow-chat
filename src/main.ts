@@ -3,14 +3,18 @@ import App from "./App.vue"
 import "./styles/main.css"
 import { routes } from "./routes"
 import { createRouter, createWebHistory } from "vue-router"
+import SocketIo from "./plugins/socket"
 
 const app = createApp(App)
-
-app.config.devtools = process.env.NODE_ENV === "development"
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 })
 
-app.use(router).mount("#app")
+app
+  .use(router)
+  .use(SocketIo, {
+    connection: "http://localhost:8000/",
+  })
+  .mount("#app")

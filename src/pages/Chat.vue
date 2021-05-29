@@ -112,7 +112,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, Ref, ref } from "vue"
+  import { defineComponent, onMounted, Ref, ref, inject } from "vue"
   import LeftArrowIcon from "../components/svg/LeftArrowIcon.vue"
   import SendIcon from "../components/svg/SendIcon.vue"
   import PlusIcon from "../components/svg/PlusIcon.vue"
@@ -150,10 +150,16 @@
       const messageContainer = ref()
       const messages: Ref<message[]> = ref([])
 
+      const connectSocket = () => {
+        const socket = inject("socket")
+        console.log(socket)
+      }
+
       onMounted(() => {
         setTimeout(() => {
           isNotifyKeyInfo.value = false
         }, 5000)
+        connectSocket()
       })
 
       const backButtonClick = () => {
